@@ -1,0 +1,37 @@
+#!/bin/bash
+#+
+# Grab a frame from a specified point in a movie using FFmpeg.
+# Invoke this script as follows:
+#
+#     ffsnap «in-movie» «time» «framefilename»
+#-
+
+opterror()
+  {
+    echo "$0: $1" 1>&2
+    exit 3
+  } # opterror
+
+for ((;;)); do
+    if [ "${1:0:2}" != "--" ]; then
+        break
+    fi
+    if [ "$1" == "--" ]; then
+        shift
+        break
+    fi
+    opt="${1:2:${#1}}"
+    shift
+    val="${opt#*=}"
+    opt="${opt%%=*}"
+    # no valid options for now
+    opterror "bad option $opt"
+done
+if [ $# != 3 ]; then
+    opterror $'Usage:\n\t'"$0 «in-movie» «time» «framefilename»"
+fi
+inmovie="$1"
+time="$2"
+framefilename="$3"
+
+exec ffmpeg -i "$1" -ss "$time" -t 0.001 -- "$framefilename"
