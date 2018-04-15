@@ -34,4 +34,4 @@ inmovie="$1"
 time="$2"
 framefilename="$3"
 
-exec ffmpeg -i "$inmovie" -ss "$time" -t 0.001 -- "$framefilename"
+exec ffmpeg -ss "$time" -t 0.001 -i "$inmovie" -- "$framefilename"
