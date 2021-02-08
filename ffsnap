@@ -3,7 +3,16 @@
 # Grab a frame from a specified point in a movie using FFmpeg.
 # Invoke this script as follows:
 #
-#     ffsnap «in-movie» «time» «framefilename»
+#     ffsnap [«opts»] «in-movie» «time» «framefilename»
+#
+# The only currently valid option for «opts» is
+#
+#     --crop=«crop-parms»
+#
+# where «crop-parms» are parameter settings for FFmpeg’s “crop” video
+# filter. For example, to crop equal amounts from the top and
+# bottom to leave a given frame height, do “--crop=h=«height»”.
+# To see all the available parameters, do “ffmpeg -help filter=crop”.
 #-
 
 opterror()
@@ -12,6 +21,7 @@ opterror()
     exit 3
   } # opterror
 
+opts=
 for ((;;)); do
     if [ "${1:0:2}" != "--" ]; then
         break
@@ -24,8 +34,11 @@ for ((;;)); do
     shift
     val="${opt#*=}"
     opt="${opt%%=*}"
-    # no valid options for now
-    opterror "bad option $opt"
+    if [ "$opt" = "crop" ]; then
+        opts="$opts -vf crop=$val"
+    else
+        opterror "bad option $opt"
+    fi
 done
 if [ $# != 3 ]; then
     opterror $'Usage:\n\t'"$0 «in-movie» «time» «framefilename»"
@@ -34,4 +47,4 @@ inmovie="$1"
 time="$2"
 framefilename="$3"
 
-exec ffmpeg -ss "$time" -t 0.001 -i "$inmovie" -frames:v 1 -- "$framefilename"
+exec ffmpeg -ss "$time" -t 0.001 -i "$inmovie" -frames:v 1 $opts -- "$framefilename"
