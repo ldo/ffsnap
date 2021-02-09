@@ -13,6 +13,9 @@
 # filter. For example, to crop equal amounts from the top and
 # bottom to leave a given frame height, do “--crop=h=«height»”.
 # To see all the available parameters, do “ffmpeg -help filter=crop”.
+#
+# Copyright 2018-2021 Lawrence D'Oliveiro <ldo@geek-central.gen.nz>.
+# Licensed under CC-BY <http://creativecommons.org/licenses/by/4.0/>.
 #-
 
 opterror()
