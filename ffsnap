@@ -47,4 +47,4 @@ inmovie="$1"
 time="$2"
 framefilename="$3"
 
-exec ffmpeg -ss "$time" -t 0.001 -i "$inmovie" -frames:v 1 $opts -- "$framefilename"
+exec ffmpeg -ss "$time" -i "$inmovie" -frames:v 1 $opts -- "$framefilename"
